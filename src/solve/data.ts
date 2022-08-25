@@ -19,6 +19,8 @@ interface IExam {
 interface IRoomSlot {
     exam?: IExam,
     blocked: boolean,
+    room: IRoom,
+    uuid: string,
 }
 
 interface IRoom {
@@ -52,6 +54,7 @@ interface ITimeTable {
 interface ILesson {
     start: moment.Moment,
     duration: moment.Duration,
+    isBreak: boolean,
 }
 
 export type {

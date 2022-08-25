@@ -2,9 +2,23 @@
     import type { IExam } from "src/solve/data";
 
     export let exam: IExam; 
+    export let onRemove: () => void;
+    export let displayDuration: boolean = false;
+
+    function dragStart(ev: DragEvent) {
+        ev.dataTransfer.setData("application/json", JSON.stringify({
+            type: "exam-card-drag",
+            uuid: exam.uuid,
+        }));
+        ev.dataTransfer.dropEffect = "move";
+    }
+
+    function dragEnd(ev: DragEvent) {
+        if(ev.dataTransfer.dropEffect !== "none") onRemove();
+    }
 </script>
 
-<div class="exam-card">
+<div class="exam-card" draggable="true" style:height={displayDuration ? `calc(var(--room-height) * ${exam.duration.asMinutes() / 60})` : "auto"} on:dragend={dragEnd} on:dragstart={dragStart}>
     <div class="exam-id">{exam.id}</div>
     <div class="exam-uuid">{exam.uuid}</div>
     <div class="exam-duration">Dauer: {exam.duration.asMinutes()} Minuten</div>
@@ -18,10 +32,12 @@
 
 <style>
     .exam-card {
-        width: 15rem;
+        /* width: 15rem; */
+        color: var(--bg-main);
         background-color: var(--color-blue);
         border-radius: var(--border-normal);
         padding: var(--padding-normal);
+        z-index: 5;
     }
     
     .exam-id {

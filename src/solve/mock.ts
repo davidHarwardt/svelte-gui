@@ -8,6 +8,7 @@ function uuid() {
 function slots() {
     return new Array(7).fill(0).map((v, i) => (<IRoomSlot>{
         blocked: false,
+        uuid: uuid(),
     }));
 }
 
@@ -88,7 +89,27 @@ const rooms: IRoom[] = [
         tags: ["oberstufe", "smartboard", "klassenraum"],
         slots: slots(), 
     },
+    {
+        uuid: uuid(),
+        number: "258",
+        tags: ["oberstufe", "smartboard", "klassenraum"],
+        slots: slots(), 
+    },
+    {
+        uuid: uuid(),
+        number: "001",
+        tags: ["musik", "smartboard", "klavier"],
+        slots: slots(), 
+    },
+    {
+        uuid: uuid(),
+        number: "258",
+        tags: ["oberstufe", "smartboard", "klassenraum"],
+        slots: slots(), 
+    },
 ];
+
+rooms.forEach(v => v.slots.forEach(s => s.room = v));
 
 const exams: IExam[] = [
     {
@@ -112,7 +133,7 @@ const exams: IExam[] = [
         tags: [{ name: "smartboard", required: true }, { name: "3d-drucker", required: true }, { name: "informatik", required: false }],
     },
     {
-        duration: moment.duration(30, "minutes"),
+        duration: moment.duration(1, "hours"),
         uuid: uuid(),
         id: "deutsch_1",
         examiners: [teachers[1]],
@@ -120,6 +141,16 @@ const exams: IExam[] = [
 
         subjects: ["deutsch"],
         tags: [{ name: "smartboard", required: true }, { name: "klassenraum", required: false }],
+    },
+    {
+        duration: moment.duration(20, "minutes"),
+        uuid: uuid(),
+        id: "musik_1",
+        examiners: [teachers[1]],
+        examinees: [students[0]],
+
+        subjects: ["musik"],
+        tags: [{ name: "smartboard", required: true }, { name: "klassenraum", required: false }, { name: "klavier", required: true }],
     },
 ];
 
@@ -132,7 +163,7 @@ const timetable = <ITimeTable>{
         { start: moment({ hour: 9, minute: 40, second: 0, millisecond: 0 }), duration: lessonDuration },
         { start: moment({ hour: 10, minute: 40, second: 0, millisecond: 0 }), duration: lessonDuration },
         { start: moment({ hour: 11, minute: 30, second: 0, millisecond: 0 }), duration: lessonDuration },
-        { start: moment({ hour: 12, minute: 15, second: 0, millisecond: 0 }), duration: lessonDuration },
+        { start: moment({ hour: 12, minute: 15, second: 0, millisecond: 0 }), duration: lessonDuration, isBreak: true },
         { start: moment({ hour: 13, minute: 5, second: 0, millisecond: 0 }), duration: lessonDuration },
     ]
 }

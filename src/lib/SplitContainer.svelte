@@ -32,7 +32,12 @@
     .split-container {
         width: 100%;
         display: grid;
+        position: relative;
         /* grid-template-columns: 50% auto minmax(0, 1fr); */
+    }
+
+    ::slotted {
+        position: relative;
     }
 
     .seperator {
