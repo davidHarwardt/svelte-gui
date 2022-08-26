@@ -22,7 +22,7 @@ import type { IExam, IRoom, ITimeTable } from "./solve/data";
 
 <div class="app">
     <div class="top-bar">
-        <div class="compute" on:click={runCompute}>compute</div>
+        <div class="compute bar-btn" on:click={runCompute}>compute</div>
     </div>
     <SplitContainer percentage={0.8}>
         <RoomContainer rooms={data.rooms} timetable={data.timetable} slot="left"/>
@@ -41,7 +41,27 @@ import type { IExam, IRoom, ITimeTable } from "./solve/data";
 
     .top-bar {
         background-color: var(--bg-sec);
-        height: 2rem;
+        /* height: 2rem; */
+    }
+
+    .bar-btn {
+        background-color: var(--fg-sec);
+        width: fit-content;
+        padding: var(--padding-normal);
+        margin: var(--padding-small);
+        border-radius: var(--border-small);
+
+        user-select: none;
+        cursor: pointer;
+        transition: 0.125s ease-out;
+    }
+
+    .bar-btn:hover {
+        filter: brightness(1.1);
+    }
+
+    .bar-btn:active {
+        transform: scale(0.9);
     }
 
     :global(::-webkit-scrollbar) {

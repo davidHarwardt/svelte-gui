@@ -32,7 +32,15 @@ function insertExamIntoSlot(examUuid: string, slot: IRoomSlot) {
 
     slot.exam = grabExamByUUID(examUuid);
 
-    let slotIdx = slot.room.slots.findIndex(v => v.uuid === slot.uuid);
+    const slotIdx = slot.room.slots.findIndex(v => v.uuid === slot.uuid);
+    const startTime = data.timetable.lessons[slotIdx].start;
+    const examEnd = startTime.clone().add(slot.exam.duration);
+    for(let i = slotIdx; i < slot.room.slots.length; i++) {
+        const slotStart = data.timetable.lessons[i].start;
+        if(slotStart.isBefore(examEnd)) {
+            slot.room.slots[i].blocked = true;
+        }
+    }
     store.set(data);
 }
 
@@ -43,10 +51,31 @@ function enterCalendars(exam, room, slot) {
 function removeExamFromSlot(slot: IRoomSlot) {
     if(!slot.exam) throw new Error("no exam in slot");
 
+    const slotIdx = slot.room.slots.findIndex(v => v.uuid === slot.uuid);
+    const startTime = data.timetable.lessons[slotIdx].start;
+    const examEnd = startTime.clone().add(slot.exam.duration);
+    for(let i = slotIdx; i < slot.room.slots.length; i++) {
+        const slotStart = data.timetable.lessons[i].start;
+        if(slotStart.isBefore(examEnd)) {
+            slot.room.slots[i].blocked = false;
+        }
+    }
     data.remainingExams.push(slot.exam);
     // todo remove all relevant calendar events
     slot.exam = undefined;
     store.set(data);
+}
+
+function iterateBlocked(slot: IRoomSlot, cb: (slot: IRoomSlot) => void) {
+    const slotIdx = slot.room.slots.findIndex(v => v.uuid === slot.uuid);
+    const startTime = data.timetable.lessons[slotIdx].start;
+    const examEnd = startTime.clone().add(slot.exam.duration);
+    for(let i = slotIdx; i < slot.room.slots.length; i++) {
+        const slotStart = data.timetable.lessons[i].start;
+        if(slotStart.isBefore(examEnd)) {
+            cb(slot);
+        }
+    }
 }
 
 function* roomSlots() {
@@ -68,12 +97,16 @@ function compute() {
         (exam, { room, slot }) => {
             insertExamIntoSlot(exam.uuid, slot);
         },
+        // hard constraints
         [
             // no overwrite exams
             (exam, { room, slot }) => !slot.exam,
             // required tags must be used
-            (exam, { room, slot }) => !exam.tags.find(v => v.required && !room.tags.includes(v.name))
+            (exam, { room, slot }) => !exam.tags.find(v => v.required && !room.tags.includes(v.name)),
+            // blocked slots arent used
+            (exam, { room, slot }) => !slot.blocked,
         ],
+        // soft constraints
         [
             // try match tags of the exams
             (exam, { room, slot }) => exam.tags.reduce((acc, v) => room.tags.includes(v.name) ? (v.required ? 20 : 10) + acc : acc, 0)

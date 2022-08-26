@@ -41,6 +41,8 @@
         <div class="card-wrapper">
             <ExamCard onRemove={onRemove} exam={roomSlot.exam} displayDuration={true}/>
         </div>
+    {:else if roomSlot.blocked}
+        <div class="empty"></div>
     {:else} 
         <div class="slot-empty" on:dragenter={dragEnter} on:dragleave={dragLeave} on:drop={drop} on:dragover={dragOver} class:dragging-over={draggingOver}></div>    
     {/if}
