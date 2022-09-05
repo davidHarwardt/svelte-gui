@@ -1,4 +1,5 @@
 import moment from "moment";
+import { Calendar } from "./calendar";
 import type { IExam, IRoom, IRoomSlot, IStudent, ITeacher, ITimeTable } from "./data";
 
 function uuid() {
@@ -18,28 +19,32 @@ const students: IStudent[] = [
             uuid: uuid(),
             name: "last",
             firstName: "first",
-        }
+        },
+        calendar: new Calendar(),
     },
     {
         name: {
             uuid: uuid(),
             name: "test",
             firstName: "asdf",
-        }
+        },
+        calendar: new Calendar(),
     },
     {
         name: {
             uuid: uuid(),
             name: "last",
             firstName: "first",
-        }
+        },
+        calendar: new Calendar(),
     },
     {
         name: {
             uuid: uuid(),
             name: "david",
             firstName: "harwardt",
-        }
+        },
+        calendar: new Calendar(),
     },
 ];
 
@@ -50,7 +55,8 @@ const teachers: ITeacher[] = [
             uuid: uuid(),
             name: "testL",
             firstName: "asdfL",
-        }
+        },
+        calendar: new Calendar(),
     },
     {
         subjects: ["deutsch"],
@@ -58,7 +64,8 @@ const teachers: ITeacher[] = [
             uuid: uuid(),
             name: "deutschL",
             firstName: "asdfL",
-        }
+        },
+        calendar: new Calendar(),
     },
     {
         subjects: ["mathe"],
@@ -66,7 +73,8 @@ const teachers: ITeacher[] = [
             uuid: uuid(),
             name: "matheL",
             firstName: "teacher",
-        }
+        },
+        calendar: new Calendar(),
     },
 ];
 

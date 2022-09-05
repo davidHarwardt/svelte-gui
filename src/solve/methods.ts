@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import type { CalendarEvent } from "./calendar";
 import type { IExam, IRoom, IRoomSlot } from "./data";
 import * as mock from "./mock";
 import { solve } from "./solve";
@@ -32,9 +33,16 @@ function insertExamIntoSlot(examUuid: string, slot: IRoomSlot) {
 
     slot.exam = grabExamByUUID(examUuid);
 
+
     const slotIdx = slot.room.slots.findIndex(v => v.uuid === slot.uuid);
     const startTime = data.timetable.lessons[slotIdx].start;
     const examEnd = startTime.clone().add(slot.exam.duration);
+
+    slot.exam.examinees.forEach(v => v.calendar.book(<CalendarEvent> {
+        duration: slot.exam.duration,
+        start: startTime,
+    }));
+
     for(let i = slotIdx; i < slot.room.slots.length; i++) {
         const slotStart = data.timetable.lessons[i].start;
         if(slotStart.isBefore(examEnd)) {
@@ -42,6 +50,8 @@ function insertExamIntoSlot(examUuid: string, slot: IRoomSlot) {
         }
     }
     store.set(data);
+    console.log(slot.exam);
+    
 }
 
 function enterCalendars(exam, room, slot) {
@@ -61,6 +71,17 @@ function removeExamFromSlot(slot: IRoomSlot) {
         }
     }
     data.remainingExams.push(slot.exam);
+
+    slot.exam.examinees.forEach(v => v.calendar.remove(<CalendarEvent> {
+        duration: slot.exam.duration,
+        start: data.timetable.lessons[slotIdx].start,
+    }));
+
+    slot.exam.examinees.forEach(v => v.calendar.remove(<CalendarEvent> {
+        duration: slot.exam.duration,
+        start: data.timetable.lessons[slotIdx].start,
+    }));
+
     // todo remove all relevant calendar events
     slot.exam = undefined;
     store.set(data);

@@ -1,4 +1,5 @@
 import type moment from "moment";
+import type { Calendar } from "./calendar";
 
 interface ITag {
     name: string,
@@ -39,11 +40,13 @@ interface IName {
 
 interface IStudent {
     name: IName,
+    calendar: Calendar,
 }
 
 interface ITeacher {
     name: IName,
     subjects: string[],
+    calendar: Calendar,
 }
 
 interface ITimeTable {
