@@ -17,8 +17,8 @@ const students: IStudent[] = [
     {
         name: {
             uuid: uuid(),
-            name: "last",
-            firstName: "first",
+            name: "last1",
+            firstName: "first1",
         },
         calendar: new Calendar(),
     },
@@ -33,16 +33,16 @@ const students: IStudent[] = [
     {
         name: {
             uuid: uuid(),
-            name: "last",
-            firstName: "first",
+            name: "last2",
+            firstName: "first2",
         },
         calendar: new Calendar(),
     },
     {
         name: {
             uuid: uuid(),
-            name: "david",
-            firstName: "harwardt",
+            name: "harwardt",
+            firstName: "david",
         },
         calendar: new Calendar(),
     },
@@ -145,7 +145,7 @@ const exams: IExam[] = [
         uuid: uuid(),
         id: "deutsch_1",
         examiners: [teachers[1]],
-        examinees: [students[0]],
+        examinees: [students[0], students[1], students[2]],
 
         subjects: ["deutsch"],
         tags: [{ name: "smartboard", required: true }, { name: "klassenraum", required: false }],

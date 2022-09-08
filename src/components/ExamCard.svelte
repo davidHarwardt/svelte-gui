@@ -1,5 +1,7 @@
 <script lang="ts">
     import type { IExam } from "src/solve/data";
+import StudentBadge from "./StudentBadge.svelte";
+import TeacherBadge from "./TeacherBadge.svelte";
 
     export let exam: IExam; 
     export let onRemove: () => void;
@@ -23,10 +25,14 @@
     <div class="exam-uuid">{exam.uuid}</div>
     <div class="exam-duration">Dauer: {exam.duration.asMinutes()} Minuten</div>
     <div class="exam-examiners">
-        todo
+        {#each exam.examiners as teacher}
+            <TeacherBadge teacher={teacher}/>
+        {/each}
     </div>
     <div class="exam-examinees">
-        todo
+        {#each exam.examinees as student}
+            <StudentBadge student={student}/>
+        {/each}
     </div>
 </div>
 
